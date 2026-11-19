@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Solo los colores que usa el XML (tema de la ventana). Los de Compose están en ui/theme/Color.kt -->
+    <color name="carbon">#FF1B1917</color>
+    <color name="barra_nav">#FF15130F</color>
+</resources>

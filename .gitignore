@@ -1,0 +1,21 @@
+# Secretos y configuración local (NUNCA subir)
+.env
+local.properties
+keystore.properties
+*.jks
+*.keystore
+
+# Compilados y cachés
+build/
+.gradle/
+.kotlin/
+target/
+uploads/
+*.log
+
+# IDE
+.idea/
+*.iml
+.vscode/*
+!.vscode/launch.json
+.DS_Store
