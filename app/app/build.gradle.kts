@@ -96,6 +96,10 @@ dependencies {
 
     // WorkManager → ejecuta la notificación aunque la app esté cerrada
     implementation("androidx.work:work-runtime-ktx:2.10.0")
+
+    // Biometric
+    implementation("androidx.biometric:biometric:1.1.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

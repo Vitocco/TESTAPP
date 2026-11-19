@@ -78,4 +78,5 @@ class VecinoInicioViewModel(application: Application) : AndroidViewModel(applica
 
     fun urlAbierta() { _abrirUrl.value = null }
     fun mensajeMostrado() { _mensaje.value = null }
+    fun avisar(texto: String) { _mensaje.value = texto }
 }

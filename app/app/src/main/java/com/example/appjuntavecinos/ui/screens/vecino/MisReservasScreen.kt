@@ -29,6 +29,7 @@ import com.example.appjuntavecinos.util.cuando
 import com.example.appjuntavecinos.util.esFutura
 import com.example.appjuntavecinos.util.porPagar
 import com.example.appjuntavecinos.util.sePuedeCancelar
+import com.example.appjuntavecinos.ui.components.rememberConfirmarConBiometria
 
 /**
  * Mis reservas (diseño 6): chips Todas / Pendientes / Aprobadas / Pasadas y una tarjeta
@@ -43,6 +44,7 @@ fun MisReservasScreen(viewModel: MisReservasViewModel = viewModel()) {
     val pagando by viewModel.pagando.collectAsState()
     val abrirUrl by viewModel.abrirUrl.collectAsState()
     val mensaje by viewModel.mensaje.collectAsState()
+    val confirmarConBiometria = rememberConfirmarConBiometria(viewModel::avisar)
 
     AlVolverAPantalla { viewModel.cargar() }
     MostrarMensaje(mensaje, viewModel::mensajeMostrado)
@@ -85,7 +87,11 @@ fun MisReservasScreen(viewModel: MisReservasViewModel = viewModel()) {
                         if (puedePagar) {
                             BotonAccion(
                                 texto = "Pagar ${Moneda.pesos(reserva.precio)} con Webpay",
-                                onClick = { viewModel.pagar(reserva) },
+                                onClick = {
+                                    confirmarConBiometria("Pagar ${Moneda.pesos(reserva.precio)} · ${reserva.sedeNombre ?: "tu reserva"}") {
+                                        viewModel.pagar(reserva)
+                                    }
+                                },
                                 cargando = pagando == reserva.id
                             )
                         }

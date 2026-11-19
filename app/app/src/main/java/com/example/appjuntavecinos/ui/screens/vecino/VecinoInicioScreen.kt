@@ -25,6 +25,7 @@ import com.example.appjuntavecinos.util.Fechas
 import com.example.appjuntavecinos.util.Moneda
 import com.example.appjuntavecinos.util.esFutura
 import com.example.appjuntavecinos.util.porPagar
+import com.example.appjuntavecinos.ui.components.rememberConfirmarConBiometria
 
 /**
  * Inicio del Vecino (diseño 3): "Hola, <nombre>", saldo de la junta del mes,
@@ -43,6 +44,7 @@ fun VecinoInicioScreen(
     val pagando by viewModel.pagando.collectAsState()
     val abrirUrl by viewModel.abrirUrl.collectAsState()
     val mensaje by viewModel.mensaje.collectAsState()
+    val confirmarConBiometria = rememberConfirmarConBiometria(viewModel::avisar)
 
     PedirPermisoNotificaciones()
     AlVolverAPantalla { viewModel.cargar() }
@@ -76,7 +78,11 @@ fun VecinoInicioScreen(
                     contenidoExtra = if (reserva.porPagar && reserva.esFutura) ({
                         BotonAccion(
                             texto = "Pagar ${Moneda.pesos(reserva.precio)} con Webpay",
-                            onClick = { viewModel.pagar(reserva) },
+                            onClick = {
+                                confirmarConBiometria("Pagar ${Moneda.pesos(reserva.precio)} · ${reserva.sedeNombre ?: "tu reserva"}") {
+                                    viewModel.pagar(reserva)
+                                }
+                            },
                             cargando = pagando == reserva.id
                         )
                     }) else null

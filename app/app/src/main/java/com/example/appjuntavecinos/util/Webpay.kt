@@ -1,12 +1,10 @@
 package com.example.appjuntavecinos.util
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
-import androidx.browser.customtabs.CustomTabColorSchemeParams
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.ui.graphics.toArgb
+import com.example.appjuntavecinos.WebpayActivity
 import com.example.appjuntavecinos.data.remote.dto.WebpayIniciarResponse
-import com.example.appjuntavecinos.ui.theme.Carbon
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,30 +12,27 @@ import kotlinx.coroutines.flow.asStateFlow
 /**
  * Flujo Webpay (Etapa 4):
  *  1. La app pide al backend POST pagos/webpay/iniciar -> {url, token}
- *  2. Se abre un Custom Tab en  url?token_ws=token  (formulario de Transbank)
+ *  2. Se abre WebpayActivity (WebView con FLAG_SECURE) en  url?token_ws=token
  *  3. Transbank vuelve al backend, que confirma el pago y redirige a zaror://pago?estado=ok|error
- *  4. Android abre la app con ese deep link (MainActivity) -> EventosPago avisa a las pantallas,
- *     que recargan reservas/mias y ven "pagada: true".
+ *  4. WebpayActivity intercepta ese enlace, avisa a EventosPago y se cierra; las pantallas
+ *     recargan reservas/mias y ven "pagada: true".
  */
 object Webpay {
 
     fun urlFormulario(r: WebpayIniciarResponse): String =
         Uri.parse(r.url).buildUpon().appendQueryParameter("token_ws", r.token).build().toString()
 
-    /** Abre el formulario de pago en un Custom Tab con la barra del color de la app. */
+    /** Abre el formulario de pago en WebpayActivity (WebView protegido con FLAG_SECURE). */
     fun abrir(context: Context, url: String) {
-        val colores = CustomTabColorSchemeParams.Builder().setToolbarColor(Carbon.toArgb()).build()
-        CustomTabsIntent.Builder()
-            .setDefaultColorSchemeParams(colores)
-            .setShowTitle(true)
-            .build()
-            .launchUrl(context, Uri.parse(url))
+        context.startActivity(
+            Intent(context, WebpayActivity::class.java).putExtra(WebpayActivity.EXTRA_URL, url)
+        )
     }
 }
 
 /**
  * Resultado que llega por el deep link zaror://pago?estado=ok|error.
- * MainActivity lo publica aquí; el Scaffold del vecino lo muestra en un Snackbar.
+ * WebpayActivity lo publica aquí; el Scaffold del vecino lo muestra en un Snackbar.
  */
 object EventosPago {
     private val _resultado = MutableStateFlow<Boolean?>(null)   // true = aprobado, false = rechazado

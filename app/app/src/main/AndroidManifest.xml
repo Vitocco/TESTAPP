@@ -63,6 +63,12 @@
                 <data android:scheme="zaror" android:host="pago" />
             </intent-filter>
         </activity>
+        <!-- Formulario de Webpay dentro de la app (con FLAG_SECURE).
+     configChanges: al girar el celular no se recrea, así no se recarga el formulario de pago -->
+        <activity
+            android:name=".WebpayActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
     </application>
 
 </manifest>
