@@ -19,3 +19,6 @@ uploads/
 .vscode/*
 !.vscode/launch.json
 .DS_Store
+
+# Excepción: la pauta exige subir el keystore de firma (sus contraseñas van en keystore.properties, que NO se sube)
+!app/keystore/junta-zaror.jks

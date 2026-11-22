@@ -1,0 +1,52 @@
+# 3) Directiva aprueba "Asado vecinal" con observación -> Calendario -> Patio y quincho
+appId: com.example.appjuntavecinos
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- runFlow:
+    file: comun/login.yaml
+    env:
+      EMAIL: "directiva@zaror.cl"
+- extendedWaitUntil:
+    visible: "Directiva"
+    timeout: 20000
+- waitForAnimationToEnd
+
+- tapOn: "Solicitudes"            # pestaña inferior
+- extendedWaitUntil:
+    visible: "Solicitudes\\."
+    timeout: 15000
+- extendedWaitUntil:
+    visible: ".*Asado vecinal"            # "Camila Rojas · Asado vecinal"
+    timeout: 15000
+- tapOn:
+    text: "Aprobar"
+    below: ".*Asado vecinal"              # el "Aprobar" de ESA tarjeta (el más cercano debajo)
+- extendedWaitUntil:
+    visible: "Aprobar solicitud"
+    timeout: 10000
+- tapOn: "Ej: Dejar el espacio limpio"    # placeholder de "Observación (opcional)"
+- inputText: "Aprobada, dejar el quincho limpio"
+# Sin hideKeyboard: dentro del diálogo podría cerrarlo
+- tapOn:
+    text: "Aprobar"
+    rightOf: "Volver"                     # el botón del diálogo, no los de las tarjetas
+- extendedWaitUntil:
+    notVisible: "Aprobar solicitud"
+    timeout: 15000
+- waitForAnimationToEnd
+
+- tapOn: "Calendario"             # pestaña inferior
+- extendedWaitUntil:
+    visible: "Sedes y calendario\\."
+    timeout: 15000
+- scrollUntilVisible:
+    element: "Patio y quincho"
+    direction: DOWN
+- tapOn: "Patio y quincho"
+- extendedWaitUntil:
+    visible: "Patio y quincho\\."
+    timeout: 15000
+- waitForAnimationToEnd

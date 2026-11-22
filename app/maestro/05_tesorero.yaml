@@ -1,0 +1,52 @@
+# 5) Tesorera: Gasto $12.990 "Materiales" "Ampolletas para la sede" (sin foto)
+#    -> Guardar -> Movimientos -> Pagos
+appId: com.example.appjuntavecinos
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- runFlow:
+    file: comun/login.yaml
+    env:
+      EMAIL: "tesorero@zaror.cl"
+- extendedWaitUntil:
+    visible: "Tesorería"
+    timeout: 20000
+- waitForAnimationToEnd
+
+- tapOn: "Gasto"                  # acceso rápido (ícono −) de Inicio
+- extendedWaitUntil:
+    visible: "Registrar movimiento"
+    timeout: 15000
+- extendedWaitUntil:
+    visible: "Materiales"         # categorías cargadas
+    timeout: 15000
+- tapOn: "0"                      # placeholder de "Monto (CLP)"
+- inputText: "12990"
+- tapOn: "Materiales"
+- tapOn: "Ej: boleta de luz"      # placeholder de "Detalle" (tipo Gasto)
+- inputText: "Ampolletas para la sede"
+- hideKeyboard
+- scrollUntilVisible:
+    element: "Guardar movimiento"
+    direction: DOWN
+- tapOn: "Guardar movimiento"
+- extendedWaitUntil:
+    visible: "Movimiento guardado"
+    timeout: 20000
+
+- tapOn: "Movimientos"            # pestaña inferior
+- extendedWaitUntil:
+    visible: "Movimientos\\."
+    timeout: 15000
+- extendedWaitUntil:
+    visible: "Ampolletas para la sede"
+    timeout: 15000
+- waitForAnimationToEnd
+
+- tapOn: "Pagos"                  # pestaña inferior
+- extendedWaitUntil:
+    visible: "Pagos de reservas\\."
+    timeout: 15000
+- waitForAnimationToEnd

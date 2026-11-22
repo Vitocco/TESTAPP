@@ -1,0 +1,9 @@
+# Subflujo: Perfil -> Cerrar sesión (sirve para los 3 roles, todos tienen la pestaña "Perfil").
+appId: com.example.appjuntavecinos
+---
+- tapOn: "Perfil" # pestaña inferior
+- scrollUntilVisible:
+    element: "Cerrar sesión"
+    direction: DOWN
+    timeout: 10000
+- tapOn: "Cerrar sesión"

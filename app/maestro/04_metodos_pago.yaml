@@ -1,0 +1,58 @@
+# 4) Camila: Reservas -> Pagar -> Transferencia -> Copiar datos -> Entendido
+#    -> Pagar -> Webpay -> resumen. NO toca "Ir a pagar" (Transbank se graba a mano).
+appId: com.example.appjuntavecinos
+---
+- launchApp:
+    clearState: true
+    permissions:
+      all: allow
+- runFlow:
+    file: comun/login.yaml
+    env:
+      EMAIL: "camila@zaror.cl"
+- extendedWaitUntil:
+    visible: "Hola,"
+    timeout: 20000
+- waitForAnimationToEnd
+
+- tapOn: "Reservas"               # pestaña inferior
+- extendedWaitUntil:
+    visible: "Mis reservas\\."
+    timeout: 15000
+- extendedWaitUntil:
+    visible: "Pagar .*"           # "Pagar $ 25.000" / "Pagar $ 35.000"
+    timeout: 15000
+- waitForAnimationToEnd
+
+# --- Transferencia ---
+- tapOn: "Pagar .*"
+- extendedWaitUntil:
+    visible: "¿Cómo quieres pagar.*"
+    timeout: 10000
+- tapOn: "Transferencia bancaria"
+- extendedWaitUntil:
+    visible: "Banco Estado"
+    timeout: 10000
+- tapOn: "Copiar datos"
+- extendedWaitUntil:
+    visible: "Datos copiados"
+    timeout: 5000
+# Android 13+ muestra unos segundos la vista previa del portapapeles encima de
+# "Entendido". El Snackbar dura 10 s: al esperar a que se vaya, la vista previa ya se fue.
+- extendedWaitUntil:
+    notVisible: "Datos copiados"
+    timeout: 15000
+- tapOn: "Entendido"
+- waitForAnimationToEnd
+
+# --- Webpay (solo el resumen) ---
+- tapOn: "Pagar .*"
+- extendedWaitUntil:
+    visible: "¿Cómo quieres pagar.*"
+    timeout: 10000
+- tapOn: "Webpay"
+- extendedWaitUntil:
+    visible: "Ir a pagar"
+    timeout: 10000
+- assertVisible: "Serás redirigido a Webpay.*"
+- waitForAnimationToEnd
