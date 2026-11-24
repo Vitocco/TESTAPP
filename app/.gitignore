@@ -14,6 +14,5 @@
 .cxx
 local.properties
 
-
-/_respaldo_tests/
+# Firma release: las contraseñas no se suben
 keystore.properties
